@@ -5,6 +5,7 @@ import App from './App';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createStandaloneToast } from '@chakra-ui/toast';
+import { ChatContextProvider } from './context/chatContext';
 
 const { ToastContainer } = createStandaloneToast();
 
@@ -35,13 +36,15 @@ const theme = extendTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<App />} path='/*' />
-        </Routes>
-        <ToastContainer />
-      </BrowserRouter>
-    </ChakraProvider>
+    <BrowserRouter>
+      <ChatContextProvider>
+        <ChakraProvider theme={theme}>
+          <Routes>
+            <Route element={<App />} path='/*' />
+          </Routes>
+          <ToastContainer />
+        </ChakraProvider>
+      </ChatContextProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
