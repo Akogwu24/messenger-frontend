@@ -10,7 +10,7 @@ export const PrimaryButton = ({ children, ...props }) => {
 
 export const OutlinedButton = ({ children, ...props }) => {
   return (
-    <Button variant='outline' color='brand.500' _hover={{ color: 'brand.400' }} {...props}>
+    <Button variant='outline' color='white' _hover={{ color: 'brand.400' }} {...props}>
       {children}
     </Button>
   );

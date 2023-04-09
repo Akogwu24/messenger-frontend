@@ -17,7 +17,7 @@ export const registerUser = async (setLoading, payload) => {
 export const login = async (setLoading, payload, navigate) => {
   setLoading(true);
   try {
-    const { data } = await http.post('/user/login', payload);
+    const { data } = await http.post(AUTH_ROUTES.LOGIN, payload);
     console.log('data', data);
 
     localStorage.setItem('userInfo', JSON.stringify(data));

@@ -17,8 +17,8 @@ const axiosInstance = axios.create({
 });
 
 const addTokenToRequest = async (req) => {
-  const token = localStorage.getItem('11#221#');
-  req.headers.Authorization = `Bearer ${token}`;
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  req.headers.Authorization = `Bearer ${userInfo?.token}`;
   return req;
 };
 
