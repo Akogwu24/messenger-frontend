@@ -11,8 +11,8 @@ const { ToastContainer } = createStandaloneToast();
 
 const theme = extendTheme({
   colors: {
-    primary: '#071e3d',
-    secondary: '#1f4287',
+    primary: 'rgba(7, 30, 61,1)',
+    secondary: 'rgba(31, 66, 135, 1)',
     bluishGreen: '#278ea5',
     themeGreen: '#21e6c1',
 
