@@ -8,60 +8,26 @@ export const phoneNumberValidation = {
   pattern: { value: isValidPhoneNumber, message: 'Invalid Phone Number' },
 };
 
-// const handlePostAdvert = (evt, files) => {
-//   evt.preventDefault();
-//   setLoading(true);
-//   console.log('files', files);
-//   const uploaders = files.map((file) => {
-//     const formData = new FormData();
+export function isObjectEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
 
-//     formData.append('file', file.file);
-//     formData.append(
-//       'upload_preset',
-//       process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
-//     );
+export const getSender = (loggedInUser, users) => {
+  return users[0]._id === loggedInUser._id ? users[1].name : users[0].name;
+};
 
-//     // for (const value of formData.values()) {
-//     //   console.log(value);
-//     // }
+export const getSenderFullInfo = (loggedInUser, users) => {
+  if (!users?.length) return;
+  return users[0]?._id === loggedInUser?._id ? users[1] : users[0];
+};
 
-//     return axios
-//       .post(
-//         `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
-//         formData,
-//         {
-//           headers: { 'X-Requested-With': 'XMLHttpRequest' },
-//         }
-//       )
-//       .then((response) => {
-//         const data = response.data;
-//         const fileURL = data.secure_url;
-//         // console.log('daata', data);
-//         // console.log('fileURL advert', fileURL);
-
-//         imgUrlsFromCloudinary.push(fileURL);
-//       });
-//   });
-
-//   // Once all the files are uploaded
-//   axios.all(uploaders).then(() => {
-//     // ... perform after upload is successful operation
-//     const { itemName, category, itemDescription, quantity, price } =
-//       formValues;
-//     const payload = {
-//       userId,
-//       tenantCode,
-//       price: `${Number(price) + serviceCharge}`,
-//       itemName,
-//       itemDescription,
-//       category: `${category.charAt(0).toUpperCase()}${category
-//         .slice(1)
-//         .toLowerCase()}`,
-//       quantity,
-//       imageUrl: imgUrlsFromCloudinary,
-//       phoneNumber: tenantPhone,
-//     };
-
-//     postAdvert(setLoading, payload, setSuccess, navigate);
-//   });
-// };
+//capitalize only the first letter of the string.
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+//capitalize all words of a string.
+export function capitalizeWords(string) {
+  return string.replace(/(?:^|\s)\S/g, function (a) {
+    return a.toUpperCase();
+  });
+}

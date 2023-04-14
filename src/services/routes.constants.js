@@ -3,4 +3,9 @@ export const AUTH_ROUTES = {
   LOGIN: '/user/login',
 
   SEARCH_USERS: (searchTerm) => `/user?search=${searchTerm}`,
+
+  //chat
+  CREATE_CHAT: '/chat',
+  GET_CHATS: '/chat',
+  CREAT_GROUP_CHAT: '/chat/group',
 };

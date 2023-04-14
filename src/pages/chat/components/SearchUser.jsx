@@ -18,6 +18,7 @@ import useDebounce from '../../../hooks/useDebounce';
 import { searchUser } from '../service';
 import { UserCard } from './UserCard';
 import { SkeletonLoader } from '../../../components/SkeletonLoader';
+import { EmptyState } from '../../../components/EmptyState';
 
 export const SearchUser = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,10 +28,8 @@ export const SearchUser = () => {
   const [searchedUsers, setSearchedUsers] = useState([]);
 
   useEffect(() => {
-    debouncedSearchTerm && searchUser(debouncedSearchTerm, setLoading, setSearchedUsers);
+    searchUser(debouncedSearchTerm, setLoading, setSearchedUsers);
   }, [debouncedSearchTerm]);
-
-  console.log('searchedUsers', searchedUsers);
 
   return (
     <>
@@ -46,10 +45,22 @@ export const SearchUser = () => {
 
           <DrawerBody>
             <Flex pb={2}>
-              <Input autoFocus placeholder='Search by name or email' mr={2} value={search} onChange={(e) => setSearch(e.target.value)} />
+              <Input
+                fontSize='13px'
+                autoFocus
+                placeholder='Search by name or email'
+                mr={2}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </Flex>
-            {loading && searchedUsers.length<1 && <SkeletonLoader />}
-            <Stack spacing='5'>{!loading && searchedUsers.length && searchedUsers?.map((user, i) => <UserCard user={user} key={i} />)}</Stack>
+            <Stack spacing='5'>
+              {loading && searchedUsers?.length < 1 && <SkeletonLoader />}
+
+              {!loading && searchedUsers?.length && searchedUsers?.map((user, i) => <UserCard onClose={onClose} user={user} key={i} />)}
+
+              {!loading && !searchedUsers?.length && <EmptyState caption='No User Found' />}
+            </Stack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
