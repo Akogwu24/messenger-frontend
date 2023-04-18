@@ -5,34 +5,37 @@ import { ChatState } from '../../../context/chatContext';
 import { SelectedUserBadgeItem } from './SelectedUserBadgeItem';
 import { PrimaryButton } from '../../../components/CustomButtons';
 import { EmptyState } from '../../../components/EmptyState';
-import { searchUser } from '../service';
+import { searchUser, updateGroupChatName } from '../service';
 import { InfoToast } from '../../../components/NotificationHandler';
+import { upadateGroupChatName } from '../../../components/CustomButtons';
 
-export const UpdateGroupChat = ({ onClose }) => {
+export const UpdateGroupChat = ({ onClose, setRefresh }) => {
   const { selectedChat, setSelectedChat, user } = ChatState();
   const [groupName, setGroupName] = useState(selectedChat?.chatName);
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
+  const debouncedSearchTerm = useDebounce(searchTerm, 800);
   const [loading, setLoading] = useState(false);
   const [updatingGroup, setUpdatingGroup] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [selectedUsersList, setSelectedUsersList] = useState(selectedChat.users);
-
-  console.log('selectedChat', selectedChat);
-  console.log('llll', selectedUsersList);
+  const [updatingGroupName, setUpdatingGroupName] = useState(false);
 
   useEffect(() => {
     searchUser(debouncedSearchTerm, setLoading, setSearchedUsers);
   }, [debouncedSearchTerm]);
 
   const addMember = (userToAdd) => {
-    // if (selectedUsersList.includes(userToAdd))
-
     if (selectedUsersList.some((user) => user._id === userToAdd._id)) return InfoToast('User already added');
     setSelectedUsersList([...selectedUsersList, userToAdd]);
   };
 
   const handleUpdateGroupChat = () => {};
+
+  const handleUpadateGroupChatName = () => {
+    const payload = { chatId: selectedChat._id, newGroupChatName: groupName };
+    updateGroupChatName(payload, setUpdatingGroupName, onClose, setRefresh);
+  };
+
   return (
     <Stack p='5'>
       <HStack justify='space-between'>
@@ -43,7 +46,7 @@ export const UpdateGroupChat = ({ onClose }) => {
       </HStack>
 
       <FormControl pt='10' pb='5'>
-        <Box mb='5'>
+        <HStack mb='5'>
           <Input
             fontSize='13px'
             autoFocus
@@ -51,7 +54,10 @@ export const UpdateGroupChat = ({ onClose }) => {
             onChange={(e) => setGroupName(e.target.value)}
             placeholder='Enter the Group Chat Name e.g JavaScript Connect'
           />
-        </Box>
+          <PrimaryButton isLoading={updatingGroupName} onClick={handleUpadateGroupChatName}>
+            Update
+          </PrimaryButton>
+        </HStack>
 
         <Input fontSize='13px' placeholder='Search and add User' onChange={(e) => setSearchTerm(e.target.value)} />
         <Flex wrap='wrap' gap='1rem' pt='5'>
@@ -94,7 +100,7 @@ export const UpdateGroupChat = ({ onClose }) => {
           </Center>
         )}
         <PrimaryButton isLoading={updatingGroup} onClick={handleUpdateGroupChat} mt='5' w='full'>
-          Create Group
+          Update Group
         </PrimaryButton>
       </FormControl>
     </Stack>

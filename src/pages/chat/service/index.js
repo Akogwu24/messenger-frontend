@@ -56,3 +56,19 @@ export const createGroupChat = async (payload, setLoading, onClose) => {
     setLoading(false);
   }
 };
+
+export const updateGroupChatName = async (payload, setUpdatingGroupName, onClose, setRefresh) => {
+  setUpdatingGroupName(true);
+  try {
+    const { data } = await http.put(AUTH_ROUTES.RENAME_GROUP_CHAT, payload);
+    console.log(data);
+    successToast();
+    setRefresh();
+    onClose();
+  } catch (e) {
+    console.log(e.response);
+    errorToast();
+  } finally {
+    setUpdatingGroupName(false);
+  }
+};

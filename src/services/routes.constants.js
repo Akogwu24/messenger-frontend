@@ -8,4 +8,5 @@ export const AUTH_ROUTES = {
   CREATE_CHAT: '/chat',
   GET_CHATS: '/chat',
   CREAT_GROUP_CHAT: '/chat/group',
+  RENAME_GROUP_CHAT: '/chat/group',
 };
