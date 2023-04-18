@@ -23,7 +23,11 @@ export const SingleChat = ({ isMobile, setShowChatBox, setRefresh, refresh }) =>
 
         {!isObjectEmpty(selectedChat) && (
           <CustomModal buttonProps={{ bg: 'bluishGreen', p: 1 }} btnTitle={<SiCodereview />}>
-            {!selectedChat?.isGroupChat ? <UserProfileModal user={getSenderFullInfo(user, selectedChat?.users)} /> : <UpdateGroupChat />}
+            {!selectedChat?.isGroupChat ? (
+              <UserProfileModal user={getSenderFullInfo(user, selectedChat?.users)} />
+            ) : (
+              <UpdateGroupChat setRefresh={setRefresh} />
+            )}
           </CustomModal>
         )}
         {/* {!isObjectEmpty(selectedChat) && selectedChat.isGroupChat && <Text>{selectedChat?.chatName}</Text>} */}

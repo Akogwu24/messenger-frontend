@@ -1,4 +1,4 @@
-import { Box, HStack, Stack, Text } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Stack, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ChatState } from '../../../context/chatContext';
 import { getChats } from '../service';
@@ -29,20 +29,15 @@ export const MyChats = ({ setShowChatBox, showChatBox, refresh, setRefresh }) =>
       <Stack h='80vh' pt='3vh' spacing='5' overflowY={'auto'}>
         {chats?.length ? (
           chats?.map((chat) => (
-            <Box
-              key={chat._id}
-              onClick={() => setSelectedChat(chat)}
-              cursor='pointer'
-              bg={selectedChat === chat ? 'bluishGreen' : 'primary'}
-              color='white'
-              p='2'
-              borderRadius='4px'
-            >
-              <Text fontWeight={600} fontSize={'1.2rem'}>
-                {chat.isGroupChat ? chat?.chatName : getSender(loggedUser, chat.users)}
-              </Text>
-              <Text as='small'>{chat?.lastMessage || 'Last Message'}</Text>
-            </Box>
+            <HStack key={chat._id} p='2' cursor='pointer' color='white' borderRadius='4px' bg={selectedChat === chat ? 'bluishGreen' : 'primary'}>
+              <Avatar src={!chat.isGroupChat && chat.users[1].pic} name={chat?.chatName} />
+              <Box onClick={() => setSelectedChat(chat)}>
+                <Text fontWeight={600} fontSize={'1.2rem'}>
+                  {chat.isGroupChat ? chat?.chatName : getSender(loggedUser, chat.users)}
+                </Text>
+                <Text as='small'>{chat?.lastMessage || 'Last Message'}</Text>
+              </Box>
+            </HStack>
           ))
         ) : (
           <SkeletonLoader />
