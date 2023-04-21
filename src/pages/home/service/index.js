@@ -2,7 +2,6 @@ import { errorToast, successToast } from '../../../components/NotificationHandle
 import http, { AUTH_ROUTES } from '../../../services/api';
 
 export const registerUser = async (setLoading, payload) => {
-  console.log('payload', payload);
   try {
     const { data } = await http.post(AUTH_ROUTES.REGISTER_USER, payload);
 
@@ -18,7 +17,6 @@ export const login = async (setLoading, payload, navigate) => {
   setLoading(true);
   try {
     const { data } = await http.post(AUTH_ROUTES.LOGIN, payload);
-    console.log('data', data);
 
     localStorage.setItem('userInfo', JSON.stringify(data));
     successToast('User successfully logged in');

@@ -7,7 +7,6 @@ export const searchUser = async (searchTerm, setLoading, setSearchedUsers) => {
     const { data } = await http.get(AUTH_ROUTES.SEARCH_USERS(searchTerm));
     setSearchedUsers(data.users);
   } catch (e) {
-    console.log(e.response);
   } finally {
     setLoading(false);
   }
@@ -20,11 +19,10 @@ export const createChat = async (setLoading, userId, onClose, setSelectedChat, c
 
     if (!chats.find((chat) => chat._id === data._id)) setChats([data.fullChat, ...chats]);
     setSelectedChat(data.fullChat);
-    console.log('data', data.fullChat);
+
     onClose();
   } catch (e) {
     errorToast();
-    console.log(e.response);
   } finally {
     setLoading(false);
   }

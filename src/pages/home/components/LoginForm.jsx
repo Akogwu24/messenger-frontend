@@ -18,7 +18,6 @@ export const LoginForm = ({ currentTab }) => {
   }, [currentTab]);
 
   const onSubmit = (data) => {
-    console.log(data);
     login(setLoading, data, navigate);
   };
 
