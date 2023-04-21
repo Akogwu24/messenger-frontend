@@ -1,13 +1,13 @@
 import { Avatar, Box, Button, Center, Flex, FormControl, HStack, Heading, Input, Spinner, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useDebounce from '../../../hooks/useDebounce';
 import { ChatState } from '../../../context/chatContext';
 import { SelectedUserBadgeItem } from './SelectedUserBadgeItem';
 import { PrimaryButton } from '../../../components/CustomButtons';
 import { EmptyState } from '../../../components/EmptyState';
-import { searchUser, updateGroupChatName } from '../service';
+import { addNewMemberToGroupChat, removeMemberFromGroup, searchUser, updateGroupChatName } from '../service';
 import { InfoToast } from '../../../components/NotificationHandler';
-import { upadateGroupChatName } from '../../../components/CustomButtons';
+import { GrFormClose } from 'react-icons/gr';
 
 export const UpdateGroupChat = ({ onClose, setRefresh }) => {
   const { selectedChat, setSelectedChat, user } = ChatState();
@@ -24,16 +24,24 @@ export const UpdateGroupChat = ({ onClose, setRefresh }) => {
     searchUser(debouncedSearchTerm, setLoading, setSearchedUsers);
   }, [debouncedSearchTerm]);
 
-  const addMember = (userToAdd) => {
+  const addMember = async (userToAdd) => {
     if (selectedUsersList.some((user) => user._id === userToAdd._id)) return InfoToast('User already added');
     setSelectedUsersList([...selectedUsersList, userToAdd]);
+    const payload = { chatId: selectedChat._id, userId: userToAdd._id };
+
+    await addNewMemberToGroupChat(payload, setUpdatingGroup);
   };
 
-  const handleUpdateGroupChat = () => {};
+  const removeMemberFormGroup = (selectedUser) => {
+    const payload = { chatId: selectedChat._id, userId: selectedUser._id };
+
+    removeMemberFromGroup(payload, setSelectedUsersList, setUpdatingGroup);
+  };
 
   const handleUpadateGroupChatName = () => {
+    if (selectedChat?.chatName === groupName) return InfoToast('Enter A new group Name');
     const payload = { chatId: selectedChat._id, newGroupChatName: groupName };
-    updateGroupChatName(payload, setUpdatingGroupName, onClose, setRefresh);
+    updateGroupChatName(payload, setUpdatingGroupName, onClose, setRefresh, setSelectedChat);
   };
 
   return (
@@ -62,23 +70,33 @@ export const UpdateGroupChat = ({ onClose, setRefresh }) => {
         <Input fontSize='13px' placeholder='Search and add User' onChange={(e) => setSearchTerm(e.target.value)} />
         <Flex wrap='wrap' gap='1rem' pt='5'>
           {selectedUsersList?.map((selectedUser) => (
-            <SelectedUserBadgeItem
-              setSelectedUsersList={setSelectedUsersList}
-              selectedUsersList={selectedUsersList}
+            <HStack
               key={selectedUser._id}
-              selectedUser={selectedUser}
-            />
+              color='white'
+              gap='0'
+              fontSize='13px'
+              px='3px'
+              borderRadius='3px'
+              cursor='pointer'
+              onClick={() => removeMemberFormGroup(selectedUser)}
+              bg='themeGreen'
+            >
+              <Text fontWeight={700} textTransform={'capitalize'}>
+                {selectedUser.name}
+              </Text>
+              <GrFormClose pl={1} color='white' />
+            </HStack>
           ))}
         </Flex>
         {loading && !searchedUsers.length && (
-          <center py='10'>
+          <Center py='10'>
             <Spinner speed='0.6s' thickness='4px' />
-          </center>
+          </Center>
         )}
 
         {!loading && searchedUsers.length ? (
           <Stack py='5' spacing='5'>
-            <Text as='small'>Click to add Members</Text>
+            <Text as='small'>{updatingGroup ? <Spinner speed='0.6s' thickness='4px' /> : 'Click to add Members'}</Text>
             {searchedUsers?.slice(0, 4)?.map((searchedUser) => (
               <HStack key={searchedUser._id} bg='gray.100' p='2' borderRadius='4px' shadow='md' onClick={() => addMember(searchedUser)}>
                 <Avatar mr={2} size='sm' cursor='pointer' name={searchedUser?.name} src={searchedUser?.pic} />
@@ -99,9 +117,9 @@ export const UpdateGroupChat = ({ onClose, setRefresh }) => {
             <EmptyState w='280px' h='25vh' caption='User not  Found' />
           </Center>
         )}
-        <PrimaryButton isLoading={updatingGroup} onClick={handleUpdateGroupChat} mt='5' w='full'>
+        {/* <PrimaryButton isLoading={updatingGroup} onClick={handleAddNewMemberToGroupChat} mt='5' w='full'>
           Update Group
-        </PrimaryButton>
+        </PrimaryButton> */}
       </FormControl>
     </Stack>
   );

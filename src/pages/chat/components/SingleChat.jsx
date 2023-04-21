@@ -30,7 +30,6 @@ export const SingleChat = ({ isMobile, setShowChatBox, setRefresh, refresh }) =>
             )}
           </CustomModal>
         )}
-        {/* {!isObjectEmpty(selectedChat) && selectedChat.isGroupChat && <Text>{selectedChat?.chatName}</Text>} */}
       </HStack>
       <Messages />
     </Stack>

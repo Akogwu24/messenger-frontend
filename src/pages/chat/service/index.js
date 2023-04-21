@@ -57,18 +57,48 @@ export const createGroupChat = async (payload, setLoading, onClose) => {
   }
 };
 
-export const updateGroupChatName = async (payload, setUpdatingGroupName, onClose, setRefresh) => {
+export const updateGroupChatName = async (payload, setUpdatingGroupName, onClose, setRefresh, setSelectedChat) => {
   setUpdatingGroupName(true);
   try {
     const { data } = await http.put(AUTH_ROUTES.RENAME_GROUP_CHAT, payload);
-    console.log(data);
-    successToast();
+    successToast('Group Successfully Updated');
+    setSelectedChat(data);
     setRefresh();
-    onClose();
+    await onClose();
+  } catch (e) {
+    console.log(e.response);
+    setRefresh();
+    errorToast();
+  } finally {
+    setUpdatingGroupName(false);
+  }
+};
+
+export const addNewMemberToGroupChat = async (payload, setUpdatingGroup) => {
+  setUpdatingGroup(true);
+  try {
+    const { data } = await http.put(AUTH_ROUTES.ADD_NEW_MEMBER_TO_GROUP, payload);
+    console.log('data', data);
+    successToast(data.message);
   } catch (e) {
     console.log(e.response);
     errorToast();
   } finally {
-    setUpdatingGroupName(false);
+    setUpdatingGroup(false);
+  }
+};
+
+export const removeMemberFromGroup = async (payload, setSelectedUsersList, setUpdatingGroup) => {
+  setUpdatingGroup(true);
+  try {
+    const { data } = await http.put(AUTH_ROUTES.REMOVE_MEMBER_FROM_GROUP, payload);
+    console.log('data', data);
+    successToast(data.message);
+    setSelectedUsersList(data.removed.users);
+  } catch (e) {
+    console.log(e.response);
+    errorToast();
+  } finally {
+    setUpdatingGroup(false);
   }
 };

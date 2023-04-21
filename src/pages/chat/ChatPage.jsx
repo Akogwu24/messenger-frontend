@@ -8,7 +8,6 @@ import { useGetWindowSize } from '../../hooks/useGetWindowSize';
 
 export const ChatPage = () => {
   const [showChatBox, setShowChatBox] = useState(false);
-  // const [isMobile] = useMediaQuery('(max-width:760px)');
   const windowSize = useGetWindowSize();
   const [isMobile, setisMobile] = useState();
   const [refresh, setRefresh] = useState({});
@@ -25,7 +24,7 @@ export const ChatPage = () => {
   return (
     <Grid gridTemplateColumns='repeat(12, 1fr)' gridTemplateRows='repeat(12, 1fr)' gap='1rem' color='white' bg='primary' minH='100vh'>
       <GridItem bg={'secondary'} gridColumn='1/13' px='4%'>
-        <Header />
+        <Header refresh={refresh} setRefresh={setRefresh} />
       </GridItem>
       {isMobile && !showChatBox ? (
         <GridItem bg={'secondary'} gridColumn={['1/13', '1/13', '1/5']} gridRow={'2/13'} px={padding}>

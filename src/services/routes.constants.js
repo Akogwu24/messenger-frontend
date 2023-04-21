@@ -9,4 +9,6 @@ export const AUTH_ROUTES = {
   GET_CHATS: '/chat',
   CREAT_GROUP_CHAT: '/chat/group',
   RENAME_GROUP_CHAT: '/chat/group',
+  ADD_NEW_MEMBER_TO_GROUP: '/chat/groupadd',
+  REMOVE_MEMBER_FROM_GROUP: '/chat/groupremove',
 };
