@@ -34,7 +34,6 @@ export const getChats = async (setLoadingChats, setChats) => {
     const { data } = await http.get(AUTH_ROUTES.GET_CHATS);
     setChats(data.results);
   } catch (e) {
-    console.log(e.response);
   } finally {
     setLoadingChats(false);
   }
@@ -43,12 +42,11 @@ export const getChats = async (setLoadingChats, setChats) => {
 export const createGroupChat = async (payload, setLoading, onClose) => {
   setLoading(true);
   try {
-    const { data } = await http.post(AUTH_ROUTES.CREAT_GROUP_CHAT, payload);
-    console.log('data', data);
+    await http.post(AUTH_ROUTES.CREAT_GROUP_CHAT, payload);
+
     successToast('Group Created Successfully');
     onClose();
   } catch (e) {
-    console.log(e.reponse);
     errorToast();
   } finally {
     setLoading(false);
@@ -64,7 +62,6 @@ export const updateGroupChatName = async (payload, setUpdatingGroupName, onClose
     setRefresh();
     await onClose();
   } catch (e) {
-    console.log(e.response);
     setRefresh();
     errorToast();
   } finally {
@@ -76,10 +73,9 @@ export const addNewMemberToGroupChat = async (payload, setUpdatingGroup) => {
   setUpdatingGroup(true);
   try {
     const { data } = await http.put(AUTH_ROUTES.ADD_NEW_MEMBER_TO_GROUP, payload);
-    console.log('data', data);
+
     successToast(data.message);
   } catch (e) {
-    console.log(e.response);
     errorToast();
   } finally {
     setUpdatingGroup(false);
@@ -90,11 +86,10 @@ export const removeMemberFromGroup = async (payload, setSelectedUsersList, setUp
   setUpdatingGroup(true);
   try {
     const { data } = await http.put(AUTH_ROUTES.REMOVE_MEMBER_FROM_GROUP, payload);
-    console.log('data', data);
+
     successToast(data.message);
     setSelectedUsersList(data.removed.users);
   } catch (e) {
-    console.log(e.response);
     errorToast();
   } finally {
     setUpdatingGroup(false);
